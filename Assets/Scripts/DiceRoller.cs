@@ -5,6 +5,8 @@ using UnityEngine.UI;
 public class DiceRoller : MonoBehaviour
 {
     [SerializeField] private Button rollButton;
+    [SerializeField] private CardStackManager cardStackManager;
+    [SerializeField] private DrawnCardPresenter drawnCardPresenter;
     [SerializeField] private PlayerTileMover playerMover;
     [SerializeField] private float rollDuration = 1.2f;
     [SerializeField] private float jumpHeight = 1.2f;
@@ -38,7 +40,7 @@ public class DiceRoller : MonoBehaviour
 
         if (rollButton != null)
         {
-            rollButton.interactable = false;
+            rollButton.gameObject.SetActive(false);
         }
 
         int[] diceValues = { 1, 1, 2, 2, 3, 3 };
@@ -68,10 +70,9 @@ public class DiceRoller : MonoBehaviour
             playerMover.MoveByDiceResult(result);
         }
 
-        if (rollButton != null)
-        {
-            rollButton.interactable = true;
-        }
+      
+
+        
 
         isRolling = false;
     }

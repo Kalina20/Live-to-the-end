@@ -1,0 +1,32 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 5e5612d4c1ab8054f975222f7e4b0a9b, type: 3}
+  m_Name: September_Stack_1
+  m_EditorClassIdentifier: Assembly-CSharp::QuestionSet
+  monthName: September
+  stackNumber: 1
+  questions:
+  - questionText: "\u041F\u0440\u0438\u0432\u0435\u04421"
+    answers:
+    - answerText: "\u043F\u043E\u043A\u0430 2"
+    - answerText: "\u043F\u043E\u043A\u0430 1"
+  - questionText: "\u041F\u0440\u0438\u0432\u0435\u04422"
+    answers:
+    - answerText: "\u043F\u043E\u043A\u0430 1"
+  - questionText: "\u041F\u0440\u0438\u0432\u0435\u0442 3"
+    answers:
+    - answerText: "\u043F\u043E\u043A\u0430 1"
+    - answerText: "\u043F\u043E\u043A\u0430 1"
+    - answerText: "\u043F\u043E\u043A\u0430 1"
+  - questionText: "\u041F\u0440\u0438\u0432\u0435\u04424"
+    answers:
+    - answerText: "\u043F\u043E\u043A\u0430 1"

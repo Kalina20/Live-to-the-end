@@ -4,11 +4,14 @@ using UnityEngine;
 public class PlayerTileMover : MonoBehaviour
 {
     [SerializeField] private BoardTile currentTile;
+    [SerializeField] private MonthManager monthManager;
+    [SerializeField] private CardStackManager cardStackManager;
+    [SerializeField] private DrawnCardPresenter drawnCardPresenter;
     [SerializeField] private float moveDuration = 0.35f;
     [SerializeField] private float jumpHeight = 0.35f;
 
     private bool isMoving;
-
+    private int lastDiceResult;
     public bool IsMoving => isMoving;
 
     private void Start()
@@ -16,6 +19,10 @@ public class PlayerTileMover : MonoBehaviour
         if (currentTile != null)
         {
             transform.position = currentTile.TokenPosition;
+            if (monthManager != null)
+            {
+                monthManager.SetCurrentMonth(currentTile.MonthName);
+            }
         }
     }
 
@@ -33,7 +40,7 @@ public class PlayerTileMover : MonoBehaviour
             Debug.LogWarning("No next tile for dice result: " + diceResult);
             return;
         }
-
+        lastDiceResult = diceResult;
         StartCoroutine(MoveToTile(nextTile));
     }
 
@@ -61,6 +68,19 @@ public class PlayerTileMover : MonoBehaviour
 
         transform.position = end;
         currentTile = targetTile;
+        if (monthManager != null)
+        {
+            monthManager.SetCurrentMonth(currentTile.MonthName);
+        }
+        if (cardStackManager != null)
+        {
+            Transform drawnCard = cardStackManager.DrawCardByDiceResult(lastDiceResult);
+
+            if (drawnCardPresenter != null)
+            {
+                drawnCardPresenter.SetDrawnCard(drawnCard, lastDiceResult);
+            }
+        }
 
         isMoving = false;
     }

@@ -2,10 +2,12 @@ using UnityEngine;
 
 public class BoardTile : MonoBehaviour
 {
+    [SerializeField] private string monthName;
     [SerializeField] private BoardTile optionOne;
     [SerializeField] private BoardTile optionTwo;
     [SerializeField] private BoardTile optionThree;
 
+    public string MonthName => monthName;
     public Vector3 TokenPosition => transform.position + Vector3.up * 0.35f;
 
     public BoardTile GetNextTile(int diceResult)
