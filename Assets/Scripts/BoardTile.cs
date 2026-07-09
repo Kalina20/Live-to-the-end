@@ -2,6 +2,10 @@ using UnityEngine;
 
 public class BoardTile : MonoBehaviour
 {
+    private const string QuestionIconName = "Question Tile Icon";
+    private const string PlusIconName = "Plus Tile Icon";
+    private const string MinusIconName = "Minus Tile Icon";
+
     [SerializeField] private string monthName;
     [SerializeField] private BoardTile optionOne;
     [SerializeField] private BoardTile optionTwo;
@@ -22,6 +26,23 @@ public class BoardTile : MonoBehaviour
                 return optionThree;
             default:
                 return null;
+        }
+    }
+
+    public void SetIconVisible(bool isVisible)
+    {
+        SetChildActive(QuestionIconName, isVisible);
+        SetChildActive(PlusIconName, isVisible);
+        SetChildActive(MinusIconName, isVisible);
+    }
+
+    private void SetChildActive(string childName, bool isActive)
+    {
+        Transform child = transform.Find(childName);
+
+        if (child != null)
+        {
+            child.gameObject.SetActive(isActive);
         }
     }
 }

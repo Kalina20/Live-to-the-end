@@ -18,19 +18,40 @@ MonoBehaviour:
   - questionText: 
     answers:
     - answerText: 
+      knowledgeChange: 0
+      friendshipChange: 0
+      moneyChange: 0
     - answerText: 2
+      knowledgeChange: 0
+      friendshipChange: 0
+      moneyChange: 0
   - questionText: 
     answers:
     - answerText: 
+      knowledgeChange: 0
+      friendshipChange: 0
+      moneyChange: 0
     - answerText: 
-    - answerText: 
+      knowledgeChange: 0
+      friendshipChange: 0
+      moneyChange: 0
   - questionText: 
     answers:
     - answerText: 
+      knowledgeChange: 0
+      friendshipChange: 0
+      moneyChange: 0
     - answerText: 
-    - answerText: 
+      knowledgeChange: 0
+      friendshipChange: 0
+      moneyChange: 0
   - questionText: 
     answers:
     - answerText: 
+      knowledgeChange: 0
+      friendshipChange: 0
+      moneyChange: 0
     - answerText: 
-    - answerText: 
+      knowledgeChange: 0
+      friendshipChange: 0
+      moneyChange: 0

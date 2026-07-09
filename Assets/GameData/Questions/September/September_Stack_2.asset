@@ -18,15 +18,40 @@ MonoBehaviour:
   - questionText: "\u041F\u0440\u0438\u0432\u0435\u04421"
     answers:
     - answerText: "\u043F\u043E\u043A\u0430 2"
+      knowledgeChange: 1
+      friendshipChange: 0
+      moneyChange: 0
     - answerText: "\u043F\u043E\u043A\u0430 1"
+      knowledgeChange: -1
+      friendshipChange: 0
+      moneyChange: 0
   - questionText: "\u041F\u0440\u0438\u0432\u0435\u04422"
     answers:
     - answerText: "\u043F\u043E\u043A\u0430 1"
+      knowledgeChange: 0
+      friendshipChange: 1
+      moneyChange: 0
+    - answerText: "\u043F\u043E\u043A\u0430 2"
+      knowledgeChange: 0
+      friendshipChange: -1
+      moneyChange: 0
   - questionText: "\u041F\u0440\u0438\u0432\u0435\u0442 3"
     answers:
     - answerText: "\u043F\u043E\u043A\u0430 1"
+      knowledgeChange: 1
+      friendshipChange: 0
+      moneyChange: 0
     - answerText: "\u043F\u043E\u043A\u0430 1"
-    - answerText: "\u043F\u043E\u043A\u0430 1"
+      knowledgeChange: 0
+      friendshipChange: 0
+      moneyChange: -10
   - questionText: "\u041F\u0440\u0438\u0432\u0435\u04424"
     answers:
     - answerText: "\u043F\u043E\u043A\u0430 1"
+      knowledgeChange: 0
+      friendshipChange: 0
+      moneyChange: 10
+    - answerText: "\u043F\u043E\u043A\u0430 2"
+      knowledgeChange: 0
+      friendshipChange: 1
+      moneyChange: 0

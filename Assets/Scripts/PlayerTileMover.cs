@@ -12,13 +12,14 @@ public class PlayerTileMover : MonoBehaviour
 
     private bool isMoving;
     private int lastDiceResult;
-    public bool IsMoving => isMoving;
 
     private void Start()
     {
         if (currentTile != null)
         {
             transform.position = currentTile.TokenPosition;
+            currentTile.SetIconVisible(false);
+
             if (monthManager != null)
             {
                 monthManager.SetCurrentMonth(currentTile.MonthName);
@@ -47,6 +48,7 @@ public class PlayerTileMover : MonoBehaviour
     private IEnumerator MoveToTile(BoardTile targetTile)
     {
         isMoving = true;
+        BoardTile previousTile = currentTile;
 
         Vector3 start = transform.position;
         Vector3 end = targetTile.TokenPosition;
@@ -67,7 +69,14 @@ public class PlayerTileMover : MonoBehaviour
         }
 
         transform.position = end;
+        if (previousTile != null)
+        {
+            previousTile.SetIconVisible(true);
+        }
+
         currentTile = targetTile;
+        currentTile.SetIconVisible(false);
+
         if (monthManager != null)
         {
             monthManager.SetCurrentMonth(currentTile.MonthName);

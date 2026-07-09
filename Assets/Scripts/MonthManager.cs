@@ -30,7 +30,5 @@ public class MonthManager : MonoBehaviour
         {
             questionManager.SetCurrentMonth(monthName);
         }
-
-        Debug.Log("Current month: " + currentMonthName);
     }
 }

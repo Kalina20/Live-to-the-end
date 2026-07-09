@@ -16,11 +16,14 @@ public class QuestionData
     [TextArea(2, 5)]
     public string questionText;
 
-    public AnswerData[] answers = new AnswerData[3];
+    public AnswerData[] answers = new AnswerData[2];
 }
 
 [Serializable]
 public class AnswerData
 {
     public string answerText;
+    public int knowledgeChange;
+    public int friendshipChange;
+    public int moneyChange;
 }

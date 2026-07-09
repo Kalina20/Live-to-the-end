@@ -9,10 +9,7 @@ public class DrawnCardPresenter : MonoBehaviour
     [SerializeField] private Button rollButton;
     [SerializeField] private QuestionManager questionManager;
     [SerializeField] private Transform discardPile;
-    [SerializeField] private CameraZoomController cameraZoomController;
 
-    [SerializeField] private float screenHeightPercent = 0.85f;
-    [SerializeField] private float cardAspect = 0.7f;
     [SerializeField] private float presentDelay = 0.45f;
     [SerializeField] private float distanceFromCamera = 3f;
     [SerializeField] private Vector3 presentedScale = new Vector3(4f, 0.08f, 2.8f);
@@ -23,13 +20,12 @@ public class DrawnCardPresenter : MonoBehaviour
 
     private Transform currentCard;
     private int currentStackNumber;
-    private Transform originalParent;
-    private Vector3 originalPosition;
-    private Quaternion originalRotation;
     private Vector3 originalScale;
     private bool isPresented;
     private bool isPresenting;
+
     public bool IsPresented => isPresented;
+
     private void Awake()
     {
         if (targetCamera == null)
@@ -38,16 +34,18 @@ public class DrawnCardPresenter : MonoBehaviour
         }
     }
 
-    private Vector3 GetCardScaleForCamera()
-    {
-        float cameraHeight = 2f * distanceFromCamera * Mathf.Tan(targetCamera.fieldOfView * 0.5f * Mathf.Deg2Rad);
-        float cardHeight = cameraHeight * screenHeightPercent;
-        float cardWidth = cardHeight * cardAspect;
-
-        return new Vector3(cardWidth, 0.08f, cardHeight);
-    }
     public void SetDrawnCard(Transform card, int stackNumber)
     {
+        if (card == null)
+        {
+            if (rollButton != null)
+            {
+                rollButton.gameObject.SetActive(true);
+            }
+
+            return;
+        }
+
         currentCard = card;
         currentStackNumber = stackNumber;
         isPresented = false;
@@ -106,11 +104,8 @@ public class DrawnCardPresenter : MonoBehaviour
         currentCard.localScale = originalScale;
 
         isPresenting = false;
-        if (hasSavedFieldOfView)
-        {
-            targetCamera.fieldOfView = previousFieldOfView;
-            hasSavedFieldOfView = false;
-        }
+        RestoreCameraFieldOfView();
+
         currentCard = null;
         isPresented = false;
 
@@ -129,16 +124,8 @@ public class DrawnCardPresenter : MonoBehaviour
 
         isPresenting = true;
 
-      //  if (cameraZoomController != null)
-       // {
-       //     cameraZoomController.ReturnToStart();
-        //}
-
         yield return new WaitForSeconds(presentDelay);
 
-        originalParent = currentCard.parent;
-        originalPosition = currentCard.localPosition;
-        originalRotation = currentCard.localRotation;
         originalScale = currentCard.localScale;
         previousFieldOfView = targetCamera.fieldOfView;
         hasSavedFieldOfView = true;
@@ -149,7 +136,6 @@ public class DrawnCardPresenter : MonoBehaviour
         currentCard.localPosition = new Vector3(0f, 0f, distanceFromCamera);
         currentCard.localRotation = Quaternion.identity;
         currentCard.localScale = presentedScale;
-            //currentCard.localScale = GetCardScaleForCamera();
 
         isPresented = true;
         isPresenting = false;
@@ -160,24 +146,14 @@ public class DrawnCardPresenter : MonoBehaviour
         }
     }
 
-    public void CloseCard()
+    private void RestoreCameraFieldOfView()
     {
-        if (currentCard == null)
+        if (!hasSavedFieldOfView || targetCamera == null)
         {
             return;
         }
 
-        currentCard.SetParent(originalParent, false);
-        currentCard.localPosition = originalPosition;
-        currentCard.localRotation = originalRotation;
-        currentCard.localScale = originalScale;
-
-        currentCard = null;
-        isPresented = false;
-
-        if (rollButton != null)
-        {
-            rollButton.gameObject.SetActive(true);
-        }
+        targetCamera.fieldOfView = previousFieldOfView;
+        hasSavedFieldOfView = false;
     }
 }

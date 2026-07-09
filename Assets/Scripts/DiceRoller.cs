@@ -5,8 +5,6 @@ using UnityEngine.UI;
 public class DiceRoller : MonoBehaviour
 {
     [SerializeField] private Button rollButton;
-    [SerializeField] private CardStackManager cardStackManager;
-    [SerializeField] private DrawnCardPresenter drawnCardPresenter;
     [SerializeField] private PlayerTileMover playerMover;
     [SerializeField] private float rollDuration = 1.2f;
     [SerializeField] private float jumpHeight = 1.2f;
@@ -64,15 +62,10 @@ public class DiceRoller : MonoBehaviour
         transform.position = startPosition;
         transform.rotation = GetRotationForResult(result);
 
-        Debug.Log("Dice result: " + result);
         if (playerMover != null)
         {
             playerMover.MoveByDiceResult(result);
         }
-
-      
-
-        
 
         isRolling = false;
     }

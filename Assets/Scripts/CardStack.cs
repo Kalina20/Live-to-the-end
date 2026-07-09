@@ -45,9 +45,6 @@ public class CardStack : MonoBehaviour
         Transform card = cards[nextCardIndex];
 
         card.localPosition += drawOffset;
-
-        Debug.Log("Draw card: " + card.name + " from " + name);
-
         nextCardIndex++;
 
         return card;
