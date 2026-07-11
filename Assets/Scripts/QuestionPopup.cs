@@ -38,53 +38,85 @@ public class QuestionPopup : MonoBehaviour
 
     public void ShowQuestion(QuestionData question)
     {
-        if (question == null)
-        {
-            return;
-        }
+        if (question == null) return;
 
         popupRoot.SetActive(true);
-
         questionText.text = question.questionText;
 
-        if (answerButtons == null)
+        if (answerButtons == null) return;
+
+        if (question.isCheckEvent)
         {
-            return;
-        }
+            if (answerButtons.Length > 1) 
+                answerButtons[1].gameObject.SetActive(false);
 
-        for (int i = 0; i < answerButtons.Length; i++)
-        {
-            bool hasAnswer = i < AnswerCount &&
-                             question.answers != null &&
-                             i < question.answers.Length &&
-                             question.answers[i] != null &&
-                             !string.IsNullOrWhiteSpace(question.answers[i].answerText);
+            answerButtons[0].gameObject.SetActive(true);
+            answerButtons[0].interactable = true;
+            SetBlockedCross(0, false);
+            
+            answerButtons[0].onClick.RemoveAllListeners();
+            answerButtons[0].onClick.AddListener(() => OnTryLuckClicked(question));
 
-            answerButtons[i].gameObject.SetActive(hasAnswer);
-            answerButtons[i].interactable = false;
-
-            answerButtons[i].onClick.RemoveAllListeners();
-            SetBlockedCross(i, false);
-
-            if (hasAnswer)
+            if (answerTexts != null && answerTexts.Length > 0 && answerTexts[0] != null)
             {
-                AnswerData answer = question.answers[i];
-                bool canUseAnswer = playerStats == null || playerStats.CanApplyAnswer(answer);
+                answerTexts[0].text = $"Испытать удачу\n({question.statToCheck} >= {question.checkThreshold})";
+            }
+        }
+        else
+        {
+            for (int i = 0; i < answerButtons.Length; i++)
+            {
+                bool hasAnswer = i < AnswerCount &&
+                                 question.answers != null &&
+                                 i < question.answers.Length &&
+                                 question.answers[i] != null &&
+                                 !string.IsNullOrWhiteSpace(question.answers[i].answerText);
 
-                if (answerTexts != null && i < answerTexts.Length && answerTexts[i] != null)
+                answerButtons[i].gameObject.SetActive(hasAnswer);
+                answerButtons[i].interactable = false;
+
+                answerButtons[i].onClick.RemoveAllListeners();
+                SetBlockedCross(i, false);
+
+                if (hasAnswer)
                 {
-                    answerTexts[i].text = answer.answerText;
-                }
+                    AnswerData answer = question.answers[i];
+                    bool canUseAnswer = playerStats == null || playerStats.CanApplyAnswer(answer);
 
-                answerButtons[i].interactable = canUseAnswer;
-                SetBlockedCross(i, !canUseAnswer);
+                    if (answerTexts != null && i < answerTexts.Length && answerTexts[i] != null)
+                    {
+                        answerTexts[i].text = answer.answerText;
+                    }
 
-                if (canUseAnswer)
-                {
-                    answerButtons[i].onClick.AddListener(() => OnAnswerClicked(answer));
+                    answerButtons[i].interactable = canUseAnswer;
+                    SetBlockedCross(i, !canUseAnswer);
+
+                    if (canUseAnswer)
+                    {
+                        answerButtons[i].onClick.AddListener(() => OnAnswerClicked(answer));
+                    }
                 }
             }
         }
+    }
+
+    private void OnTryLuckClicked(QuestionData question)
+    {
+        if (playerStats == null) return;
+
+        int currentValue = playerStats.GetStatValue(question.statToCheck);
+        bool isSuccess = currentValue >= question.checkThreshold;
+        
+        AnswerData outcome = isSuccess ? question.answers[0] : question.answers[1];
+        
+        questionText.text = outcome.answerText;
+
+        answerButtons[0].onClick.RemoveAllListeners();
+        if (answerTexts != null && answerTexts.Length > 0 && answerTexts[0] != null)
+        {
+            answerTexts[0].text = "Продолжить";
+        }
+        answerButtons[0].onClick.AddListener(() => OnAnswerClicked(outcome));
     }
 
     private void OnAnswerClicked(AnswerData answer)
@@ -121,19 +153,13 @@ public class QuestionPopup : MonoBehaviour
 
     private void CreateRuntimeBlockedCrosses()
     {
-        if (answerButtons == null)
-        {
-            return;
-        }
+        if (answerButtons == null) return;
 
         runtimeBlockedCrosses = new GameObject[answerButtons.Length];
 
         for (int i = 0; i < Mathf.Min(AnswerCount, answerButtons.Length); i++)
         {
-            if (answerButtons[i] == null)
-            {
-                continue;
-            }
+            if (answerButtons[i] == null) continue;
 
             GameObject crossObject = new GameObject("Blocked Cross");
             crossObject.transform.SetParent(answerButtons[i].transform, false);
@@ -158,17 +184,11 @@ public class QuestionPopup : MonoBehaviour
 
     private void SetupAnswerButtonsLayout()
     {
-        if (answerButtons == null)
-        {
-            return;
-        }
+        if (answerButtons == null) return;
 
         for (int i = 0; i < answerButtons.Length; i++)
         {
-            if (answerButtons[i] == null)
-            {
-                continue;
-            }
+            if (answerButtons[i] == null) continue;
 
             if (i >= AnswerCount)
             {
@@ -218,10 +238,7 @@ public class QuestionPopup : MonoBehaviour
 
     private void SetupQuestionText()
     {
-        if (questionText == null)
-        {
-            return;
-        }
+        if (questionText == null) return;
 
         RectTransform rectTransform = questionText.GetComponent<RectTransform>();
 
