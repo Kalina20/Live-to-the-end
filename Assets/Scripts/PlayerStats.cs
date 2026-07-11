@@ -3,9 +3,9 @@ using UnityEngine;
 
 public class PlayerStats : MonoBehaviour
 {
-    [SerializeField] private int knowledge;
-    [SerializeField] private int friendship;
-    [SerializeField] private int money;
+    [SerializeField] private int knowledge = 20;
+    [SerializeField] private int friendship = 20;
+    [SerializeField] private int money = 15000;
 
     public int Knowledge => knowledge;
     public int Friendship => friendship;
@@ -29,6 +29,14 @@ public class PlayerStats : MonoBehaviour
 
     private void Start()
     {
+        StatsChanged?.Invoke();
+    }
+
+    public void InitializeStats(int startKnowledge, int startFriendship, int startMoney)
+    {
+        knowledge = startKnowledge;
+        friendship = startFriendship;
+        money = startMoney;
         StatsChanged?.Invoke();
     }
 
@@ -56,5 +64,16 @@ public class PlayerStats : MonoBehaviour
         money += answer.moneyChange;
 
         StatsChanged?.Invoke();
+    }
+
+    public int GetStatValue(StatType statType)
+    {
+        switch (statType)
+        {
+            case StatType.Knowledge: return knowledge;
+            case StatType.Friendship: return friendship;
+            case StatType.Money: return money;
+            default: return 0;
+        }
     }
 }
