@@ -59,7 +59,7 @@ public class QuestionPopup : MonoBehaviour
 
             if (answerTexts != null && answerTexts.Length > 0 && answerTexts[0] != null)
             {
-                answerTexts[0].text = $"Испытать удачу\n({question.statToCheck} >= {question.checkThreshold})";
+                answerTexts[0].text = "Испытать удачу";
             }
         }
         else
