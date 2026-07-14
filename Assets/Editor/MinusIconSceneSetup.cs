@@ -12,6 +12,7 @@ public static class MinusIconSceneSetup
     private const string MaterialPath = "Assets/Materials/MinusIconRed.mat";
     private const string ScenePath = "Assets/Scenes/SampleScene.unity";
     private const string IconObjectName = "Minus Tile Icon";
+    private static readonly Vector3 IconWorldScale = new Vector3(25f, 30f, 40f);
 
     [MenuItem("Tools/Setup Minus Icons")]
     public static void Setup()
@@ -96,7 +97,11 @@ public static class MinusIconSceneSetup
             icon.name = IconObjectName;
             icon.transform.localPosition = new Vector3(0f, 2f, 0f);
             icon.transform.localRotation = Quaternion.Euler(0f, 0f, 0f);
-            icon.transform.localScale = new Vector3(25f, 30f, 40f);
+            icon.transform.localScale = new Vector3(
+                IconWorldScale.x / tile.transform.lossyScale.x,
+                IconWorldScale.y / tile.transform.lossyScale.y,
+                IconWorldScale.z / tile.transform.lossyScale.z
+            );
         }
 
         EditorSceneManager.MarkSceneDirty(EditorSceneManager.GetActiveScene());

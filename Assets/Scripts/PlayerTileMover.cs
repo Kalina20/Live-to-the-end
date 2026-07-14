@@ -7,14 +7,33 @@ public class PlayerTileMover : MonoBehaviour
     [SerializeField] private MonthManager monthManager;
     [SerializeField] private CardStackManager cardStackManager;
     [SerializeField] private DrawnCardPresenter drawnCardPresenter;
+    [SerializeField] private PlayerEmotionController emotionController;
+    [SerializeField] private Transform playerVisual;
     [SerializeField] private float moveDuration = 0.35f;
     [SerializeField] private float jumpHeight = 0.35f;
 
     private bool isMoving;
     private int lastDiceResult;
+    private int completedJumps;
 
     private void Start()
     {
+        if (emotionController == null)
+        {
+            emotionController = GetComponent<PlayerEmotionController>();
+        }
+
+        if (emotionController == null)
+        {
+            emotionController = gameObject.AddComponent<PlayerEmotionController>();
+        }
+
+        if (playerVisual == null)
+        {
+            Transform foundVisual = transform.Find("Player Visual");
+            playerVisual = foundVisual != null ? foundVisual : transform;
+        }
+
         if (currentTile != null)
         {
             transform.position = currentTile.TokenPosition;
@@ -76,11 +95,23 @@ public class PlayerTileMover : MonoBehaviour
 
         currentTile = targetTile;
         currentTile.SetIconVisible(false);
+        completedJumps++;
+
+        if (completedJumps % 4 == 0)
+        {
+            RotatePlayerVisual();
+        }
 
         if (monthManager != null)
         {
             monthManager.SetCurrentMonth(currentTile.MonthName);
         }
+
+        if (emotionController != null)
+        {
+            yield return emotionController.PlayEmotionForDiceResult(lastDiceResult);
+        }
+
         if (cardStackManager != null)
         {
             Transform drawnCard = cardStackManager.DrawCardByDiceResult(lastDiceResult);
@@ -92,5 +123,15 @@ public class PlayerTileMover : MonoBehaviour
         }
 
         isMoving = false;
+    }
+
+    private void RotatePlayerVisual()
+    {
+        if (playerVisual == null)
+        {
+            return;
+        }
+
+        playerVisual.localRotation *= Quaternion.Euler(0f, 90f, 0f);
     }
 }
