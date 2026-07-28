@@ -11,12 +11,6 @@ public class DrawnCardPresenter : MonoBehaviour
     [SerializeField] private Transform discardPile;
 
     [SerializeField] private float presentDelay = 0.45f;
-    [SerializeField] private float distanceFromCamera = 3f;
-    [SerializeField] private Vector3 presentedScale = new Vector3(4f, 0.08f, 2.8f);
-    [SerializeField] private float cardViewFieldOfView = 35f;
-
-    private float previousFieldOfView;
-    private bool hasSavedFieldOfView;
 
     private Transform currentCard;
     private int currentStackNumber;
@@ -104,7 +98,6 @@ public class DrawnCardPresenter : MonoBehaviour
         currentCard.localScale = originalScale;
 
         isPresenting = false;
-        RestoreCameraFieldOfView();
 
         currentCard = null;
         isPresented = false;
@@ -127,15 +120,7 @@ public class DrawnCardPresenter : MonoBehaviour
         yield return new WaitForSeconds(presentDelay);
 
         originalScale = currentCard.localScale;
-        previousFieldOfView = targetCamera.fieldOfView;
-        hasSavedFieldOfView = true;
-        targetCamera.fieldOfView = cardViewFieldOfView;
-
-        currentCard.SetParent(targetCamera.transform, false);
-
-        currentCard.localPosition = new Vector3(0f, 0f, distanceFromCamera);
-        currentCard.localRotation = Quaternion.identity;
-        currentCard.localScale = presentedScale;
+        MoveCurrentCardToDiscard();
 
         isPresented = true;
         isPresenting = false;
@@ -146,14 +131,16 @@ public class DrawnCardPresenter : MonoBehaviour
         }
     }
 
-    private void RestoreCameraFieldOfView()
+    private void MoveCurrentCardToDiscard()
     {
-        if (!hasSavedFieldOfView || targetCamera == null)
+        if (currentCard == null || discardPile == null)
         {
             return;
         }
 
-        targetCamera.fieldOfView = previousFieldOfView;
-        hasSavedFieldOfView = false;
+        currentCard.SetParent(discardPile, false);
+        currentCard.localPosition = Vector3.zero;
+        currentCard.localRotation = Quaternion.identity;
+        currentCard.localScale = originalScale;
     }
 }

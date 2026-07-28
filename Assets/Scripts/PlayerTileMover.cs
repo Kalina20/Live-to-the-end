@@ -1,4 +1,5 @@
 using System.Collections;
+using System;
 using UnityEngine;
 
 public class PlayerTileMover : MonoBehaviour
@@ -15,6 +16,8 @@ public class PlayerTileMover : MonoBehaviour
     private bool isMoving;
     private int lastDiceResult;
     private int completedJumps;
+
+    public event Action<BoardTile> TileReached;
 
     private void Start()
     {
@@ -96,6 +99,7 @@ public class PlayerTileMover : MonoBehaviour
         currentTile = targetTile;
         currentTile.SetIconVisible(false);
         completedJumps++;
+        TileReached?.Invoke(currentTile);
 
         if (completedJumps % 4 == 0)
         {

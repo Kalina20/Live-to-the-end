@@ -12,6 +12,7 @@ public class QuestionPopup : MonoBehaviour
     [SerializeField] private TMP_Text questionText;
     [SerializeField] private Button[] answerButtons;
     [SerializeField] private TMP_Text[] answerTexts;
+    [SerializeField] private Color popupBackgroundColor = new Color(0.86f, 0.74f, 0.56f, 1f);
     [SerializeField] private Color answerButtonColor = new Color(0.98f, 0.84f, 0.35f, 1f);
     [SerializeField] private Color answerButtonDisabledColor = new Color(0.55f, 0.55f, 0.55f, 0.75f);
     [SerializeField] private Color answerTextColor = new Color(0.16f, 0.12f, 0.08f, 1f);
@@ -33,6 +34,7 @@ public class QuestionPopup : MonoBehaviour
 
         SetupAnswerButtonsLayout();
         SetupQuestionText();
+        SetupPopupBackground();
         CreateRuntimeBlockedCrosses();
     }
 
@@ -41,6 +43,7 @@ public class QuestionPopup : MonoBehaviour
         if (question == null) return;
 
         popupRoot.SetActive(true);
+        ApplyPopupLayout();
         questionText.text = question.questionText;
 
         if (answerButtons == null) return;
@@ -98,6 +101,14 @@ public class QuestionPopup : MonoBehaviour
                 }
             }
         }
+    }
+
+    private void ApplyPopupLayout()
+    {
+        SetupPopupBackground();
+        SetupQuestionText();
+        SetupAnswerButtonsLayout();
+        Canvas.ForceUpdateCanvases();
     }
 
     private void OnTryLuckClicked(QuestionData question)
@@ -204,7 +215,7 @@ public class QuestionPopup : MonoBehaviour
                 rectTransform.anchorMax = new Vector2(0.5f, 0f);
                 rectTransform.pivot = new Vector2(0.5f, 0.5f);
                 rectTransform.sizeDelta = new Vector2(680f, 105f);
-                rectTransform.anchoredPosition = new Vector2(0f, i == 0 ? 250f : 115f);
+                rectTransform.anchoredPosition = new Vector2(0f, i == 0 ? 330f : 195f);
             }
 
             Image image = answerButtons[i].GetComponent<Image>();
@@ -247,7 +258,7 @@ public class QuestionPopup : MonoBehaviour
             rectTransform.anchorMin = new Vector2(0.5f, 1f);
             rectTransform.anchorMax = new Vector2(0.5f, 1f);
             rectTransform.pivot = new Vector2(0.5f, 0.5f);
-            rectTransform.anchoredPosition = new Vector2(0f, -245f);
+            rectTransform.anchoredPosition = new Vector2(0f, -335f);
             rectTransform.sizeDelta = new Vector2(740f, 360f);
         }
 
@@ -257,5 +268,30 @@ public class QuestionPopup : MonoBehaviour
         questionText.fontSizeMax = 42f;
         questionText.alignment = TextAlignmentOptions.Center;
         questionText.margin = new Vector4(24f, 18f, 24f, 18f);
+    }
+
+    private void SetupPopupBackground()
+    {
+        if (popupRoot == null) return;
+
+        RectTransform rectTransform = popupRoot.GetComponent<RectTransform>();
+        if (rectTransform != null)
+        {
+            rectTransform.anchorMin = Vector2.zero;
+            rectTransform.anchorMax = Vector2.one;
+            rectTransform.offsetMin = Vector2.zero;
+            rectTransform.offsetMax = Vector2.zero;
+        }
+
+        Image backgroundImage = popupRoot.GetComponent<Image>();
+        if (backgroundImage == null)
+        {
+            backgroundImage = popupRoot.AddComponent<Image>();
+        }
+
+        Color backgroundColor = popupBackgroundColor;
+        backgroundColor.a = 1f;
+        backgroundImage.color = backgroundColor;
+        backgroundImage.raycastTarget = true;
     }
 }

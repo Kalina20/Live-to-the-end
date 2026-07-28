@@ -12,6 +12,7 @@ public class PlayerStats : MonoBehaviour
     public int Money => money;
 
     public event Action StatsChanged;
+    public event Action<AnswerData> AnswerApplied;
 
     [RuntimeInitializeOnLoadMethod(RuntimeInitializeLoadType.AfterSceneLoad)]
     private static void EnsurePlayerStatsInScene()
@@ -64,6 +65,7 @@ public class PlayerStats : MonoBehaviour
         money += answer.moneyChange;
 
         StatsChanged?.Invoke();
+        AnswerApplied?.Invoke(answer);
     }
 
     public int GetStatValue(StatType statType)

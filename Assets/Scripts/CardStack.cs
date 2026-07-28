@@ -4,6 +4,9 @@ public class CardStack : MonoBehaviour
 {
     [SerializeField] private Transform[] cards;
     [SerializeField] private Vector3 drawOffset = new Vector3(0f, 0.4f, -1.2f);
+    [SerializeField] private Transform drawTarget;
+    [SerializeField] private bool drawTowardTarget = true;
+    [SerializeField] private float drawTowardTargetDistance = 0.45f;
 
     private Transform[] originalParents;
     private Vector3[] originalLocalPositions;
@@ -26,6 +29,15 @@ public class CardStack : MonoBehaviour
             originalLocalRotations[i] = cards[i].localRotation;
             originalLocalScales[i] = cards[i].localScale;
         }
+
+        if (drawTarget == null)
+        {
+            GameObject dice = GameObject.Find("Dice");
+            if (dice != null)
+            {
+                drawTarget = dice.transform;
+            }
+        }
     }
 
     public Transform DrawNextCard()
@@ -44,10 +56,39 @@ public class CardStack : MonoBehaviour
 
         Transform card = cards[nextCardIndex];
 
-        card.localPosition += drawOffset;
+        MoveCardToDrawPosition(card);
         nextCardIndex++;
 
         return card;
+    }
+
+    private void MoveCardToDrawPosition(Transform card)
+    {
+        if (card == null)
+        {
+            return;
+        }
+
+        if (!drawTowardTarget || drawTarget == null)
+        {
+            card.localPosition += drawOffset;
+            return;
+        }
+
+        Vector3 directionToTarget = drawTarget.position - card.position;
+        directionToTarget.y = 0f;
+
+        if (directionToTarget.sqrMagnitude < 0.001f)
+        {
+            directionToTarget = transform.forward;
+            directionToTarget.y = 0f;
+        }
+
+        float drawDistance = drawTowardTargetDistance;
+        Vector3 drawMovement = directionToTarget.normalized * drawDistance;
+        drawMovement.y = drawOffset.y;
+
+        card.position += drawMovement;
     }
 
     public void ResetStack()
